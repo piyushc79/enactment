@@ -1,2 +1,2 @@
 # enactment
-self data structure and algorithm based problem
+data structure and algorithm based problem's python code
