@@ -44,15 +44,11 @@ class BinaryTreeNode:
         if not data:
             return None
 
+        mid = len(data)/2
+        root = BinaryTreeNode(data[mid])
 
-        root = BinaryTreeNode(data.pop(0))
-
-        if len(data) >= 2:
-            root.left = BinaryTreeNode.create_tree(data)
-            root.right = BinaryTreeNode.create_tree(data)
-        else:
-            root.left = BinaryTreeNode.create_tree(data)
-
+        root.left = BinaryTreeNode.create_tree(data[:mid])
+        root.right = BinaryTreeNode.create_tree(data[mid+1:])
         return root
 
 
@@ -144,25 +140,62 @@ def inorder_iterative(root):
             node = node.right
 
 
+def level_order(root):
+    if not root:
+        return None
+
+    queue_stack = [root]
+    node = None
+
+    while queue_stack:
+        node = queue_stack.pop(0)
+        print node.data,
+
+        if node.left:
+            queue_stack.append(node.left)
+        if node.right:
+            queue_stack.append(node.right)
+
+max_data = None
+
+
+def find_max_recursive(root):
+    global max_data
+
+    if not root:
+        return None
+
+    if root.data > max_data:
+            max_data = root.data
+
+    find_max_recursive(root.left)
+    find_max_recursive(root.right)
+    return max_data
+
 if __name__ == "__main__":
     data = [1,2,3,4,5,6,7]
-    import ipdb; ipdb.set_trace()
     root = BinaryTreeNode.create_tree(data)
-    print "----Preorder Iterative----"
+    print "-----Preorder  Iterative-----"
     preorder_iterative(root)
     print '\n'
-    print "----Preorder Recursive----"
+    print "-----Preorder  Recursive-----"
     preorder_recursive(root)
     print '\n'
-    print "----Postorder Iterative----"
+    print "----Postorder   Iterative----"
     postorder_iterative(root)
     print '\n'
-    print "----Postorder Recursive----"
+    print "----Postorder   Recursive----"
     postorder_recursive(root)
     print '\n'
-    print "----Inorder Iterative----"
+    print "-----Inorder   Iterative-----"
     inorder_iterative(root)
     print '\n'
-    print "----Inorder Recursive----"
+    print "-----Inorder   Recursive-----"
     inorder_recursive(root)
     print '\n'
+    print "----Level Order Traversal----"
+    level_order(root)
+    print '\n'
+
+    max_data = find_max_recursive(root)
+    print max_data
