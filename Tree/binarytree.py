@@ -145,7 +145,6 @@ def level_order(root):
         return None
 
     queue_stack = [root]
-    node = None
 
     while queue_stack:
         node = queue_stack.pop(0)
@@ -172,9 +171,77 @@ def find_max_recursive(root):
     find_max_recursive(root.right)
     return max_data
 
-if __name__ == "__main__":
-    data = [1,2,3,4,5,6,7]
-    root = BinaryTreeNode.create_tree(data)
+
+def find_max_using_level_order(root):
+    if not root:
+        return None
+    max_data = None
+    queue_stack = [root]
+    while queue_stack:
+        node = queue_stack.pop(0)
+        if node.data > max_data:
+            max_data = node.data
+        if node.left:
+            queue_stack.append(node.left)
+        if node.right:
+            queue_stack.append(node.right)
+    return max_data
+
+
+def find_recursive(root, data):
+    if not root:
+        return False
+    if root.data == data:
+        return True
+    is_find = find_recursive(root.left, data)
+    if not is_find:
+        is_find = find_recursive(root.right, data)
+    return is_find
+
+
+def find_using_level_order(root, data):
+    if not root:
+        return None
+    queue_stack = [root]
+
+    while queue_stack:
+        node = queue_stack.pop(0)
+        if node.data == data:
+            return True
+        if node.left:
+            queue_stack.append(node.left)
+        if node.right:
+            queue_stack.append(node.right)
+    return False
+
+
+def insert_in_binary_tree_using_level_order(root, data):
+    if data is None:
+        return None
+
+    new_node = BinaryTreeNode(data)
+    if not root:
+        root = new_node
+        return root
+
+    queue_stack = [root]
+    while queue_stack:
+        node = queue_stack.pop(0)
+        if node.data == data:
+            return root
+        if node.left:
+            queue_stack.append(node.left)
+        else:
+            node.left = new_node
+            return root
+        if node.right:
+            queue_stack.append(node.right)
+        else:
+            node.right = new_node
+            return root
+
+
+def print_statement(root):
     print "-----Preorder  Iterative-----"
     preorder_iterative(root)
     print '\n'
@@ -197,5 +264,21 @@ if __name__ == "__main__":
     level_order(root)
     print '\n'
 
-    max_data = find_max_recursive(root)
-    print max_data
+if __name__ == "__main__":
+    data = [1,2,3,4,5,6,7]
+    root = BinaryTreeNode.create_tree(data)
+    print_statement(root)
+
+    print 'find_max_recursive: ', find_max_recursive(root)
+
+    print 'find_max_using_level_order: ', find_max_using_level_order(root)
+
+    print 'find_recursive 7: ', find_recursive(root, 7)
+    print 'find_recursive 9: ', find_recursive(root, 9)
+
+    print 'find_using_level_order 7: ', find_using_level_order(root, 7)
+    print 'find_using_level_order 9: ', find_using_level_order(root, 9)
+
+    root = insert_in_binary_tree_using_level_order(root, 8)
+    print 'Tree Traversal after inserting element'
+    print_statement(root)
