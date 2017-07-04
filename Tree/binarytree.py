@@ -241,6 +241,90 @@ def insert_in_binary_tree_using_level_order(root, data):
             return root
 
 
+def find_size_recursive(root):
+    if not root:
+        return 0
+    return find_size_recursive(root.left) + find_size_recursive(root.right) + 1
+
+
+def find_size_by_using_level_traversal(root):
+    if not root:
+        return 0
+    queue_stack = [root]
+    count = 0
+    while queue_stack:
+        node = queue_stack.pop(0)
+        count += 1
+        if node.left:
+            queue_stack.append(node.left)
+        if node.right:
+            queue_stack.append(node.right)
+    return count
+
+
+def level_order_traversal_in_reverse(root):
+    if not root:
+        return None
+
+    queue = [root]
+    stack = []
+    while queue:
+        node = queue.pop(0)
+        stack.append(node.data)
+
+        if node.right:
+            queue.append(node.right)
+        if node.left:
+            queue.append(node.left)
+
+    stack.reverse()
+    for data in stack:
+        print data,
+
+
+def max_path_sum_util(root, res):
+    # Base Case
+    if root is None:
+        return 0
+
+    if root.left is None and root.right is None:
+        return root.data
+
+    # Find maximum sum in left and right subtree. Also
+    # find maximum root to leaf sums in left and right
+    # subtrees ans store them in ls and rs
+    ls = max_path_sum_util(root.left, res)
+    rs = max_path_sum_util(root.right, res)
+
+    # If both left and right children exist
+    if root.left is not None and root.right is not None:
+        # update result if needed
+        res[0] = max(res[0], ls + rs + root.data)
+
+        # Return maximum possible value
+        # for root being on one side
+        return max(ls, rs) + root.data
+
+    # If any of the two children is empty, return
+    # root sum for root being on one side
+    if root.left is None:
+        return rs + root.data
+    else:
+        return ls + root.data
+
+
+# The main function which returns sum of the maximum
+# sum path between two leaves. This function mainly
+# uses max_path_sum_util()
+def max_path_sum(root):
+    if not root:
+        return 0
+
+    res = [root.data]
+    max_path_sum_util(root, res)
+    return res[0]
+
+
 def print_statement(root):
     print "-----Preorder  Iterative-----"
     preorder_iterative(root)
@@ -263,12 +347,16 @@ def print_statement(root):
     print "----Level Order Traversal----"
     level_order(root)
     print '\n'
+    print "----Level Order Traversal In Reverse----"
+    level_order_traversal_in_reverse(root)
+    print '\n'
 
 if __name__ == "__main__":
     data = [1,2,3,4,5,6,7]
     root = BinaryTreeNode.create_tree(data)
     print_statement(root)
 
+    print 'Maximum path sum value: {}'.format(max_path_sum(root))
     print 'find_max_recursive: ', find_max_recursive(root)
 
     print 'find_max_using_level_order: ', find_max_using_level_order(root)
@@ -278,7 +366,9 @@ if __name__ == "__main__":
 
     print 'find_using_level_order 7: ', find_using_level_order(root, 7)
     print 'find_using_level_order 9: ', find_using_level_order(root, 9)
-
+    print 'Size of tree before inserting new element: ', find_size_by_using_level_traversal(root)
     root = insert_in_binary_tree_using_level_order(root, 8)
+    print 'Size of tree after inserting new element: ', find_size_by_using_level_traversal(root)
     print 'Tree Traversal after inserting element'
     print_statement(root)
+    print 'Maximum path sum value: {}'.format(max_path_sum(root))
