@@ -108,10 +108,33 @@ def insert_node(root, node):
                 insert_node(root.right, node)
 
 
+def delete_node(root, data):
+    if root is None:
+        return root
+    if root.data > data:
+        root.left = delete_node(root.left, data)
+    elif root.data < data:
+        root.right = delete_node(root.right, data)
+    else:
+        if root.left is None:
+            temp = root.right
+            root = None
+            return temp
+        elif root.right is None:
+            temp = root.left
+            root = None
+            return temp
+
+        temp = find_min_recursive(root.right)
+        root.data = temp.data
+        root.right = delete_node(root.right, temp.data)
+    return root
+
+
 if __name__ == '__main__':
     root = BSTNode(4)
-    # items = [7, 2, 6, 9, 3, 1, 8, 5]
-    items = [1,2,3,5,6,7,8,9]
+    items = [7, 2, 6, 9, 3, 1, 8, 5]
+    # items = [1, 2, 3, 5, 6, 7, 8, 9]
     for i in items:
         ith_node = BSTNode(i)
         insert_node(root, ith_node)
@@ -121,3 +144,5 @@ if __name__ == '__main__':
     print 'predecessor', predecessor.data
     successor = successor_bst(root)
     print 'successor', successor.data
+    delete_node(root, 2)
+    print_statement(root)
