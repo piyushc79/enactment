@@ -325,6 +325,79 @@ def max_path_sum(root):
     return res[0]
 
 
+# def print_vector(v):
+#     print ', '.join(map(str, v))
+#
+#
+# def print_path_sum_util(root, path):
+#     if not root:
+#         return 0
+#
+#     path.append(root.data)
+#
+#     print_path_sum_util(root.left, path)
+#     print_path_sum_util(root.right, path)
+#
+#     if not(root.left and root.right):
+#         print_vector(path)
+#     else:
+#         path.append(None)
+#     pop_data = path.pop()
+#     while pop_data is not None and path:
+#         pop_data = path.pop()
+#
+#
+# def print_path_sum(root):
+#     path = []
+#     print_path_sum_util(root, path)
+
+
+def path_finder(root, val, path, paths):
+    # import ipdb; ipdb.set_trace()
+    if not root:
+        return False
+
+    if not root.left and root.right:
+        if root.data == val:
+            path.append(root.data)
+            paths.append(path)
+            return True
+        else:
+            return False
+
+    left = path_finder(root.left, val-root.data, path, paths)
+    right = path_finder(root.right, val-root.data, path, paths)
+    return left or right
+
+
+def has_path_with_sum(root, val):
+    paths = []
+    path_finder(root, val, [], paths)
+    print 'Sum: {}'.format(val)
+    print 'paths: {}'.format(paths)
+
+
+i = 0
+
+
+def build_tree_from_pre_order(A):
+    global i
+    if not A or i>len(A):
+        return None, i
+
+    new_node = BinaryTreeNode(A[i])
+    if A[i] == 'L':
+        return new_node
+
+    i += 1
+    new_node.left = build_tree_from_pre_order(A)
+
+    i += 1
+    new_node.right = build_tree_from_pre_order(A)
+
+    return new_node
+
+
 def print_statement(root):
     print "-----Preorder  Iterative-----"
     preorder_iterative(root)
@@ -352,23 +425,48 @@ def print_statement(root):
     print '\n'
 
 if __name__ == "__main__":
-    data = [1,2,3,4,5,6,7]
-    root = BinaryTreeNode.create_tree(data)
-    print_statement(root)
-
-    print 'Maximum path sum value: {}'.format(max_path_sum(root))
-    print 'find_max_recursive: ', find_max_recursive(root)
-
-    print 'find_max_using_level_order: ', find_max_using_level_order(root)
-
-    print 'find_recursive 7: ', find_recursive(root, 7)
-    print 'find_recursive 9: ', find_recursive(root, 9)
-
-    print 'find_using_level_order 7: ', find_using_level_order(root, 7)
-    print 'find_using_level_order 9: ', find_using_level_order(root, 9)
-    print 'Size of tree before inserting new element: ', find_size_by_using_level_traversal(root)
-    root = insert_in_binary_tree_using_level_order(root, 8)
-    print 'Size of tree after inserting new element: ', find_size_by_using_level_traversal(root)
-    print 'Tree Traversal after inserting element'
-    print_statement(root)
-    print 'Maximum path sum value: {}'.format(max_path_sum(root))
+    # data = [1,2,3,4,5,6,7]
+    # root = BinaryTreeNode.create_tree(data)
+    # print_statement(root)
+    #
+    # print 'Maximum path sum value: {}'.format(max_path_sum(root))
+    # print 'find_max_recursive: ', find_max_recursive(root)
+    #
+    # print 'find_max_using_level_order: ', find_max_using_level_order(root)
+    #
+    # print 'find_recursive 7: ', find_recursive(root, 7)
+    # print 'find_recursive 9: ', find_recursive(root, 9)
+    #
+    # print 'find_using_level_order 7: ', find_using_level_order(root, 7)
+    # print 'find_using_level_order 9: ', find_using_level_order(root, 9)
+    # print 'Size of tree before inserting new element: ', find_size_by_using_level_traversal(root)
+    # root = insert_in_binary_tree_using_level_order(root, 8)
+    # print 'Size of tree after inserting new element: ', find_size_by_using_level_traversal(root)
+    # print 'Tree Traversal after inserting element'
+    # print_statement(root)
+    # print 'Maximum path sum value: {}'.format(max_path_sum(root))
+    # root = BinaryTreeNode(1)
+    # root.left = BinaryTreeNode(3)
+    # root.left.left = BinaryTreeNode(2)
+    # root.left.right = BinaryTreeNode(1)
+    # root.right = BinaryTreeNode(-1)
+    # root.right.left = BinaryTreeNode(4)
+    # root.right.left.left = BinaryTreeNode(1)
+    # root.right.left.right = BinaryTreeNode(2)
+    # root.right.right = BinaryTreeNode(5)
+    # root.right.right.right = BinaryTreeNode(2)
+    # has_path_with_sum(root, 5)
+    # s = 21
+    # root = BinaryTreeNode(10)
+    # root.left = BinaryTreeNode(8)
+    # root.right = BinaryTreeNode(2)
+    # root.left.right = BinaryTreeNode(5)
+    # root.left.left = BinaryTreeNode(3)
+    # root.right.left = BinaryTreeNode(2)
+    # print has_path_with_sum(root, s)
+    A = ['I', 'I', 'L', 'I', 'L', 'L', 'I', 'L', 'L']
+    root = build_tree_from_pre_order(A)
+    print 'input: {}'.format(' '.join(A))
+    preorder_recursive(root)
+    print '\n'
+    postorder_recursive(root)
