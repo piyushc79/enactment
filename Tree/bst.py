@@ -131,6 +131,15 @@ def delete_node(root, data):
     return root
 
 
+def lca(root, n1, n2):
+    if root is None:
+        return None
+    if n1 > root.data  and n2 > root.data:
+        return lca(root.right, n1, n2)
+    if n1 < root.data and n2 < root.data:
+        return lca(root.left, n1, n2)
+    return root
+
 if __name__ == '__main__':
     root = BSTNode(4)
     items = [7, 2, 6, 9, 3, 1, 8, 5]
@@ -144,5 +153,7 @@ if __name__ == '__main__':
     print 'predecessor', predecessor.data
     successor = successor_bst(root)
     print 'successor', successor.data
-    delete_node(root, 2)
+    lca = lca(root, 3, 7)
+    print lca.data if lca is not None else 'None'
+    root = delete_node(root, 4)
     print_statement(root)
