@@ -159,7 +159,7 @@ if __name__ == '__main__':
     print 'successor: ', successor.data
 
     lca = lca(root, 3, 7)
-    print 'Lease common Ancestor: ', lca.data if lca is not None else 'None'
+    print 'Least common Ancestor: ', lca.data if lca is not None else 'None'
 
     from bst_dll import BST2DLL
 
