@@ -147,13 +147,31 @@ if __name__ == '__main__':
     for i in items:
         ith_node = BSTNode(i)
         insert_node(root, ith_node)
+
     from binarytree import print_statement
+
     print_statement(root)
+
     predecessor = predecessor_bst(root)
-    print 'predecessor', predecessor.data
+    print 'predecessor: ', predecessor.data
+
     successor = successor_bst(root)
-    print 'successor', successor.data
+    print 'successor: ', successor.data
+
     lca = lca(root, 3, 7)
-    print lca.data if lca is not None else 'None'
-    root = delete_node(root, 4)
-    print_statement(root)
+    print 'Lease common Ancestor: ', lca.data if lca is not None else 'None'
+
+    from bst_dll import BST2DLL
+
+    bst2dll = BST2DLL()
+    dll = bst2dll.convert(root)
+
+    for _ in range(len(items)):
+        print dll.data, '---',
+        dll = dll.right
+    for _ in range(len(items)+1):
+        if dll.left is None:
+            print dll.data,
+        else:
+            print dll.data, '---',
+        dll = dll.left
